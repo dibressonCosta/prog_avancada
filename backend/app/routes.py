@@ -13,7 +13,7 @@ def index():
 
 @app.route('/create', methods=['POST'])
 def create():
-    json_data = request.form.to_dict()
+    json_data = request.json
     if json_data is not None:
         db.agenda.insert_one(json_data)
         return jsonify(mensagem='agenda criado')
@@ -35,7 +35,7 @@ def delete(userId):
 
 @app.route('/update', methods=['POST'])
 def update():
-    json_data = request.form.to_dict()
+    json_data = request.json
     if json_data is not None and db.agenda.find_one({"_id": ObjectId(json_data["id"])}) is not None:
         db.agenda.update_one({'_id': ObjectId(json_data["id"])}, {"$set": {'nome':
         json_data["nome"], 'email': json_data["email"]}})

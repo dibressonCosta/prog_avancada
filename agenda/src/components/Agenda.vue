@@ -90,29 +90,41 @@
   </v-row>
 </template>
 <script>
-
 export default {
-    data: () => ({
-        today: new Date().toISOString().substr(0,10),
-        focus: new Date().toISOString().substr(0,10),
-        type: "month",
-        typeToLabel:{
-            month: "Mês",
-            week: "Semana",
-            day: "Dia",
-            "4day": "4 dias"
+  data: () => ({
+    today: new Date().toISOString().substr(0, 10),
+    focus: new Date().toISOString().substr(0, 10),
+    type: "month",
+    typeToLabel: {
+      month: "Mês",
+      week: "Semana",
+      day: "Dia",
+      "4day": "4 dias",
+    },
+    titulo: null,
+    detalhes: null,
+    inicio: null,
+    final: null,
+    cor: "#1976d2",
+    currentlyEditing: null,
+    selectedEvent: {},
+    selectedElement: {},
+    selectedOpen: false,
+    events: [],
+    dialog: false,
+  }),
+  created: function () {
+    this.fetchUsuarioData();
+  },
+
+  methods: {
+    fetchUsuarioData: function () {
+      this.$http.get('http://localhost:5000/index').then(
+        (response) => {
+          this.events = response.body
         },
-        titulo: null,
-        detalhes: null,
-        inicio: null,
-        final: null,
-        cor: "#1976d2",
-        currentlyEditing: null,
-        selectedEvent: {},
-        selectedElement: {},
-        selectedOpen: false,
-        events: [],
-        dialog: false
-    })
+      )
+    }
+  }
 };
 </script>

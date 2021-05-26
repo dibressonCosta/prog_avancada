@@ -8,12 +8,14 @@
 
 <script>
 import Agenda from './components/Agenda.vue';
+//import List from "./components/List.vue";
 
 export default {
   name: 'App',
 
   components: {
     Agenda,
+    //List,
   },
 
   data: () => ({
