@@ -61,10 +61,7 @@ def create():
 #@auth.login_required
 def delete():
     json_data = request.json
-    print("--------------------------------------------------------")
-    print(json_data)
     if json_data is not None:
-        print("not noneeeeeeeeee")
         id = json_data["id"]
         result = functions.salvarDelecao(id)
         if result == True:
@@ -76,7 +73,6 @@ def delete():
 
 
 
-# usuarios kjsdfalskjdfaçlskdjfaçlskdjfaçlskdjfaçlksdjfaçslkdjfaçklsdfj
 @app.route('/event', methods=['PUT'])
 def update():
     json_data = request.json
@@ -100,7 +96,6 @@ def update():
 @app.route('/registro', methods=['POST'])
 def create_user():
     json_data = request.json
-    # views.salvarNovo(json_data)
     if json_data is not None:
         email = str(json_data["email"])
         senha = json_data["senha"]
