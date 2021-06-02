@@ -38,7 +38,6 @@ def index():
 
 @app.route('/event', methods=['POST'])
 def create():
-    print("---------------------------------------------- teste")
     json_data = request.json
     # views.salvarNovo(json_data)
     if json_data is not None:
@@ -58,11 +57,14 @@ def create():
 
 
 
-@app.route("/event", methods=["DELETE"])
+@app.route('/event', methods=['DELETE'])
 #@auth.login_required
 def delete():
     json_data = request.json
+    print("--------------------------------------------------------")
+    print(json_data)
     if json_data is not None:
+        print("not noneeeeeeeeee")
         id = json_data["id"]
         result = functions.salvarDelecao(id)
         if result == True:
@@ -81,8 +83,6 @@ def update():
     if json_data is not None:
         print(json_data)
         id = json_data["id"]
-        print("----------------------------------------------------------------------")
-        print(id)
         name = json_data["name"]
         details = json_data["details"]
         start = json_data["start"]
