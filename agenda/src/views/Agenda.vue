@@ -6,7 +6,7 @@
           <v-btn outlined class="mr-4" color="grey darken-2" @click="setToday">
             Hoje
           </v-btn>
-          <v-btn color="primary" dark @click.stop="dialog = true">
+          <v-btn color="red lighten-3" dark @click.stop="dialog = true">
             Novo Evento
           </v-btn>
           <v-btn fab text small color="grey darken-2" @click="prev">
@@ -59,18 +59,22 @@
               <v-text-field
                 v-model="name"
                 type="text"
-                label="event name (required)"
+                label="Nome do evento (Obrigatório)"
               >
               </v-text-field>
-              <v-text-field v-model="details" type="text" label="detail">
+              <v-text-field v-model="details" type="text" label="detalhes">
               </v-text-field>
               <v-text-field
                 v-model="start"
                 type="date"
-                label="start (required)"
+                label="Início (Obrigatório)"
               >
               </v-text-field>
-              <v-text-field v-model="end" type="date" label="end (required)">
+              <v-text-field
+                v-model="end"
+                type="date"
+                label="Final (Obrigatório)"
+              >
               </v-text-field>
               <v-text-field
                 v-model="color"
@@ -94,11 +98,11 @@
         </v-card>
       </v-dialog>
 
-      <v-sheet height="600">
+      <v-sheet height="700">
         <v-calendar
           ref="calendar"
           v-model="focus"
-          color="primary"
+          color="red lighten-3"
           locale="pt"
           :events="events"
           :event-color="getEventColor"
@@ -115,7 +119,7 @@
         >
           <v-card color="grey lighten-4" min-width="350px" flat>
             <v-toolbar :color="selectedEvent.color" dark>
-              <v-btn @click="deleteEvent(selectedEvent)" icon>
+              <v-btn @click.prevent="deleteEvent(selectedEvent)" icon>
                 <v-icon>mdi-delete</v-icon>
               </v-btn>
               <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
@@ -182,32 +186,13 @@ export default {
     details: null,
     start: null,
     end: null,
-    color: "#1976d2",
+    color: "#6593A6",
     currentlyEditing: null,
     selectedEvent: {},
     selectedElement: null,
     selectedOpen: false,
     events: [],
     dialog: false,
-    names: [
-      "Meeting",
-      "Holiday",
-      "PTO",
-      "Travel",
-      "Event",
-      "Birthday",
-      "Conference",
-      "Party",
-    ],
-    colors: [
-      "blue",
-      "indigo",
-      "deep-purple",
-      "cyan",
-      "green",
-      "orange",
-      "grey darken-1",
-    ],
   }),
   created: function () {
     this.fetchEventData();
@@ -253,9 +238,23 @@ export default {
       ev.start = evento.start;
       ev.end = evento.end;
       ev.color = evento.color;
-      console.log(ev);
       await axios.put("http://localhost:5000/event", ev).then(
         (response) => {
+          console.log(response);
+          //this.$router.push('list')
+        },
+        (response) => {
+          alert(response.data["mensagem"]);
+        }
+      );
+    },
+    async deleteEvent(evento) {
+      var ev = {};
+      ev.id = evento._id.$oid;
+      await axios.delete("http://localhost:5000/event", { data: ev }).then(
+        (response) => {
+          this.selectedOpen = false;
+          this.fetchEventData();
           console.log(response);
           //this.$router.push('list')
         },
