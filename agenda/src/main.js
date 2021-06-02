@@ -5,6 +5,7 @@ import vuetify from './plugins/vuetify'
 //import VueResource from 'vue-resource'
 import VueTextareaAutosize from 'vue-textarea-autosize'
 //import Axios from 'axios'
+import "./assets/styles.scss";
 
 Vue.use(VueTextareaAutosize);
 
