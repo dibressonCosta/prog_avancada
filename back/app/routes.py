@@ -13,6 +13,7 @@ auth = HTTPTokenAuth(scheme='Bearer')
 tokens = {
     "dmlhc29mdGNoYXZldG9rZW5zZWVkaW4yMDIx": "token_viasoft",
     "123": "bla",
+    "101081606362101081606362luiz@gusta.com": "luiz@gusta.com",
 }
 
 
