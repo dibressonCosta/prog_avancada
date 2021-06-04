@@ -7,34 +7,46 @@
       </v-col>
       <v-col cols="4" class="right">
         <h2>LOGIN</h2>
-          <v-form @submit.prevent="submit">
-              <v-text-field
-                v-model="nome"
-                label="Nome de usuário"
-                required
-                outlined
-                dark
-                filled
-                dense
-              ></v-text-field>
-              <v-text-field
-                v-model="password"
-                label="Senha"
-                :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
-                @click:append="showPass = !showPass"
-                required
-                outlined
-                dense
-                dark
-                filled
-                :type="showPass ? 'text' : 'password'"
-              ></v-text-field>
-            <div class="text-center">
-              <v-btn class="signin-btn" type="submit" rounded color="white" dark>
-                Entrar
-              </v-btn>
-            </div>
-          </v-form>
+        <v-form @submit.prevent="submit">
+          <v-text-field
+            v-model="email"
+            label="Email"
+            required
+            outlined
+            dark
+            filled
+            dense
+          ></v-text-field>
+          <v-text-field
+            v-model="password"
+            label="Senha"
+            :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
+            @click:append="showPass = !showPass"
+            required
+            outlined
+            dense
+            dark
+            filled
+            :type="showPass ? 'text' : 'password'"
+          ></v-text-field>
+          <div class="text-center">
+            <v-btn class="signin-btn" type="submit" rounded color="white" dark>
+              Entrar
+            </v-btn>
+          </div>
+          <div class="text-center" style="padding-top: 10px">
+            <v-btn
+              class="signin-btn"
+              type="button"
+              href="/cadastro"
+              rounded
+              color="white"
+              dark
+            >
+              Cadastrar
+            </v-btn>
+          </div>
+        </v-form>
       </v-col>
     </v-row>
   </section>
@@ -42,6 +54,9 @@
 
 
 <script>
+import axios from "axios";
+axios.defaults.headers.common["Content-Type"] = "application/json";
+axios.defaults.headers.common["Access-Control-Allow-Origin"] = "*";
 
 export default {
   data: () => ({
@@ -49,26 +64,26 @@ export default {
     password: null,
     showPass: false,
   }),
-  computed: {
-    params() {
-      return {
-        email: this.email,
-        password: this.password,
-      };
-    },
-  },
   methods: {
     async submit() {
-      const valid = await this.$refs.observer.validate();
-      if (valid) {
-        this.login(this.params); // action to login
-      }
-    },
-    clear() {
-      // you can use this method to clear login form
-      this.email = "";
-      this.password = null;
-      this.$refs.observer.reset();
+      var user = {};
+      user.email = this.email;
+      user.senha = this.password;
+      await axios.post("http://localhost:5000/login", user).then(
+        (response) => {
+          this.email = null;
+          this.password = null;
+          if (response === null){
+            alert("Dados Errados");
+          }
+          if (response.status == 200) {
+            this.$router.push("/");
+          }
+        },
+        (response) => {
+          alert(response);
+        }
+      );
     },
   },
 };
