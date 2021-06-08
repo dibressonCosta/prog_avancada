@@ -217,7 +217,6 @@ export default {
       this.$router.push("/login");
     },
     async addEvent() {
-      //console.log(evento)
       var ev = {};
       ev.name = this.name;
       ev.details = this.details;
@@ -235,7 +234,6 @@ export default {
           this.end = null;
           this.color = "#1976d2";
           this.fetchEventData();
-          //this.$router.push('list')
         },
         (response) => {
           alert(response.data["mensagem"]);
@@ -243,7 +241,6 @@ export default {
       );
     },
     async updateEvent(evento) {
-      //console.log(evento)
       var ev = {};
       ev.id = evento._id.$oid;
       ev.name = evento.name;
@@ -254,7 +251,6 @@ export default {
       await axios.put("http://localhost:5000/event", ev).then(
         (response) => {
           console.log(response);
-          //this.$router.push('list')
         },
         (response) => {
           alert(response.data["mensagem"]);
@@ -269,7 +265,6 @@ export default {
           this.selectedOpen = false;
           this.fetchEventData();
           console.log(response);
-          //this.$router.push('list')
         },
         (response) => {
           alert(response.data["mensagem"]);

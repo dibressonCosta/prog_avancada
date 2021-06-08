@@ -139,7 +139,6 @@ def getCODE():
 @app.route('/login', methods=['POST'])
 def login():
     json_data = request.json
-    # views.salvarNovo(json_data)
     if json_data is not None:
         email = str(json_data["email"])
         senha = json_data["senha"]
@@ -152,7 +151,6 @@ def login():
             result = user_functions.entrar(
                 email, senha)
             if result != False:
-                # print(result)
                 code = result[0].get('code')
                 email = result[0].get('email')
                 token = code+getCODE()+email
