@@ -48,6 +48,9 @@
               </v-list-item>
             </v-list>
           </v-menu>
+          <v-btn color="red lighten-3" style="margin-left: 10px;" dark @click.prevent="sair()">
+            Sair
+          </v-btn>
         </v-toolbar>
       </v-sheet>
       <!-- adicionar evento -->
@@ -171,6 +174,8 @@
 import axios from "axios";
 axios.defaults.headers.common["Content-Type"] = "application/json";
 axios.defaults.headers.common["Access-Control-Allow-Origin"] = "*";
+axios.defaults.headers.common = {'Authorization': `bearer ${localStorage.getItem('token')}`}
+
 export default {
   data: () => ({
     today: new Date().toISOString().substr(0, 10),
@@ -199,10 +204,17 @@ export default {
   },
 
   methods: {
-    fetchEventData: function () {
-      axios.get("http://localhost:5000/index").then((response) => {
+    fetchEventData: async function () {
+      var user = {};
+      user.id = localStorage.getItem('id');
+      await axios.post("http://localhost:5000/index", user).then((response) => {
         this.events = response.data;
+
       });
+    },
+    sair(){
+      localStorage.clear();
+      this.$router.push("/login");
     },
     async addEvent() {
       //console.log(evento)
@@ -212,6 +224,7 @@ export default {
       ev.start = this.start;
       ev.end = this.end;
       ev.color = this.color;
+      ev.userId = localStorage.getItem('id');
       console.log(ev);
       await axios.post("http://localhost:5000/event", ev).then(
         (response) => {

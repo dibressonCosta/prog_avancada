@@ -11,9 +11,7 @@ import base64
 auth = HTTPTokenAuth(scheme='Bearer')
 
 tokens = {
-    "dmlhc29mdGNoYXZldG9rZW5zZWVkaW4yMDIx": "token_viasoft",
-    "123": "bla",
-    "101081606362101081606362luiz@gusta.com": "luiz@gusta.com",
+    "qalqwe": "sadfsadfjoi",
 }
 
 
@@ -29,25 +27,31 @@ def unauthorized():
     return jsonify({'error': 'Unauthorized access'}), 401
 
 
-@app.route('/', methods=['GET'])
-@app.route('/index', methods=['GET'])
+@app.route('/index', methods=['POST'])
+@auth.login_required
 def index():
-    return flask.jsonify(json.loads(json_util.dumps(db.agenda.find({}).sort("_id", 1))))
-
+    json_data = request.json
+    if json_data is not None:
+        userId = json_data["id"]
+        return flask.jsonify(json.loads(json_util.dumps(db.agenda.find({"userId": userId}).sort("_id", 1))))
+    else:
+        return jsonify(mensagem='Erro'), 404
+    
 
 
 
 @app.route('/event', methods=['POST'])
+@auth.login_required
 def create():
     json_data = request.json
-    # views.salvarNovo(json_data)
     if json_data is not None:
         name = json_data["name"]
         details = json_data["details"]
         start = json_data["start"]
         end = json_data["end"]
         color = json_data["color"]
-        result = functions.salvarNovo(name, details, start, end, color)
+        userId = json_data["userId"]
+        result = functions.salvarNovo(name, details, start, end, color, userId)
         if result != False:
             return jsonify(mensagem='Evento criado')
         else:
@@ -59,7 +63,7 @@ def create():
 
 
 @app.route('/event', methods=['DELETE'])
-#@auth.login_required
+@auth.login_required
 def delete():
     json_data = request.json
     if json_data is not None:
@@ -75,6 +79,7 @@ def delete():
 
 
 @app.route('/event', methods=['PUT'])
+@auth.login_required
 def update():
     json_data = request.json
     if json_data is not None:
@@ -170,11 +175,9 @@ def login():
 @auth.login_required
 def validate():
     json_data = request.json
-    # views.salvarNovo(json_data)
     if json_data is not None:
         email = str(json_data["email"])
         id = json_data["id"]
-        code = json_data["code"]
         if email.count('@') == 1 and email.count('.') >= 1:
             email = email.strip()
             if email[-1] == '.':
@@ -182,7 +185,7 @@ def validate():
             email = str(email.replace(',', '').replace(
                 ';', '').replace('!', '').replace('"', '').replace("'", ''))
             result = user_functions.validate(
-                email, id, code)
+                email, id)
             if result != False:
                 return flask.jsonify(json.loads(json_util.dumps({"result": result})))
             else:

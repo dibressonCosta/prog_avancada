@@ -3,7 +3,7 @@ from bson.objectid import ObjectId
 
 
 
-def salvarNovo(name,details, start, end, color):
+def salvarNovo(name,details, start, end, color, userId):
     try:
         db.agenda.insert_one(
             {"name": name,
@@ -11,6 +11,7 @@ def salvarNovo(name,details, start, end, color):
              "start": start,
              "end": end,
              "color": color,
+             "userId": userId,
              }
         )
         return True

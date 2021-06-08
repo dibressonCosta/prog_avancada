@@ -47,11 +47,11 @@ def entrar(email, senha):
         return False
 
 
-def validate(email, id,code):
+def validate(email, id):
     email = email.strip()
     id = id.strip()
     usuario = db.usuario.find(
-         {"email": email, "_id": ObjectId(id), "code":code})
+         {"email": email, "_id": ObjectId(id)})
     if usuario.count() > 0:
         return usuario
     else:

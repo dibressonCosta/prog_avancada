@@ -73,15 +73,17 @@ export default {
         (response) => {
           this.email = null;
           this.password = null;
-          if (response === null){
-            alert("Dados Errados");
-          }
           if (response.status == 200) {
+            console.log(response.data.token)
+            localStorage.setItem("token", response.data.token);
+            localStorage.setItem("email", user.email);
+            localStorage.setItem("id", response.data.result[0]._id.$oid);
             this.$router.push("/");
           }
         },
         (response) => {
-          alert(response);
+         this.$swal("Dados inválidos");
+         console.log(response)
         }
       );
     },
